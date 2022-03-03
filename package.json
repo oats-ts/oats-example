@@ -1,0 +1,17 @@
+{
+  "name": "oats-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "ts-node ./generate.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@oats-ts/openapi": "0.0.14",
+    "ts-node": "^10.6.0",
+    "typescript": "^4.6.2"
+  }
+}
