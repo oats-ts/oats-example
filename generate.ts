@@ -1,8 +1,8 @@
 import {
   generate,
+  generators,
   nameProviders,
   pathProviders,
-  presets,
   prettierStringify,
   reader,
   writer,
@@ -13,12 +13,12 @@ generate({
   configuration: {
     log: true,
     name: nameProviders.default(),
-    path: pathProviders.singleFile('src/generated/bookStore.ts'),
+    path: pathProviders.singleFile('src/generated/types.ts'),
   },
   reader: reader({
-    path: 'https://raw.githubusercontent.com/oats-ts/oats-schemas/master/schemas/book-store.json',
+    path: 'https://raw.githubusercontent.com/oats-ts/oats-schemas/master/schemas/union-type-schemas.json',
   }),
-  generators: presets.fullStack(),
+  generators: [generators.types()],
   writer: writer({
     stringify: prettierStringify(prettierConfig),
   }),
