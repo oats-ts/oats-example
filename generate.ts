@@ -1,3 +1,5 @@
+import { rm } from 'fs/promises'
+
 import {
   generate,
   generators,
@@ -9,17 +11,33 @@ import {
 } from '@oats-ts/openapi'
 import prettierConfig from './.prettierrc.json'
 
-generate({
-  configuration: {
-    log: true,
-    name: nameProviders.default(),
-    path: pathProviders.singleFile('src/generated/types.ts'),
-  },
-  reader: reader({
-    path: 'https://raw.githubusercontent.com/oats-ts/oats-schemas/master/schemas/union-type-schemas.json',
-  }),
-  generators: [generators.types()],
-  writer: writer({
-    stringify: prettierStringify(prettierConfig),
-  }),
-})
+const OUTPUT_PATH = 'src/generated'
+
+async function clearAndGenerate() {
+  await rm(OUTPUT_PATH, { force: true, recursive: true })
+  return generate({
+    configuration: {
+      log: true,
+      name: nameProviders.default(),
+      path: pathProviders.byTarget(OUTPUT_PATH, {
+        'json-schema/type': 'myTypes.ts',
+      }),
+    },
+    reader: reader({
+      path: 'https://raw.githubusercontent.com/oats-ts/oats-schemas/master/schemas/ignored-schemas.json',
+    }),
+    generators: [
+      generators.types(),
+      generators.typeGuards({
+        ignore: (schema: any) => {
+          return Boolean(schema['x-ignore'])
+        },
+      }),
+    ],
+    writer: writer({
+      stringify: prettierStringify(prettierConfig),
+    }),
+  })
+}
+
+clearAndGenerate()
