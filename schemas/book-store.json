@@ -6,14 +6,6 @@
   },
   "components": {
     "schemas": {
-      "BookType": {
-        "type": "string",
-        "enum": [
-          "paperback",
-          "digital",
-          "audio"
-        ]
-      },
       "Book": {
         "type": "object",
         "required": [
@@ -36,9 +28,6 @@
           "description": {
             "type": "string"
           },
-          "bookType": {
-            "$ref": "#/components/schemas/BookType"
-          },
           "price": {
             "type": "number"
           }
@@ -47,8 +36,7 @@
       "AppError": {
         "type": "object",
         "required": [
-          "message",
-          "code"
+          "message"
         ],
         "properties": {
           "message": {
@@ -75,7 +63,7 @@
             }
           },
           {
-            "name": "limit",
+            "name": "x-limit",
             "style": "simple",
             "in": "header",
             "description": "Parameter used for pagination, the amount of records you need",
@@ -99,7 +87,12 @@
             },
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
               }
             }
           },
@@ -184,20 +177,20 @@
       }
     },
     "/books/{bookId}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "bookId",
-          "description": "The id of the book",
-          "required": true,
-          "schema": {
-            "type": "number"
-          }
-        }
-      ],
       "get": {
         "operationId": "getBook",
         "description": "Returns the book associated with the given bookId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookId",
+            "description": "The id of the book",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Returns a book identified by it's id",
