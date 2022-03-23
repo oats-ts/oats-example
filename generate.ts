@@ -2,9 +2,9 @@ import { rm } from 'fs/promises'
 
 import {
   generate,
-  generators,
   nameProviders,
   pathProviders,
+  presets,
   prettierStringify,
   reader,
   writer,
@@ -19,21 +19,10 @@ async function clearAndGenerate() {
     configuration: {
       log: true,
       name: nameProviders.default(),
-      path: pathProviders.byTarget(OUTPUT_PATH, {
-        'json-schema/type': 'myTypes.ts',
-      }),
+      path: pathProviders.default(OUTPUT_PATH),
     },
-    reader: reader({
-      path: 'https://raw.githubusercontent.com/oats-ts/oats-schemas/master/schemas/ignored-schemas.json',
-    }),
-    generators: [
-      generators.types(),
-      generators.typeGuards({
-        ignore: (schema: any) => {
-          return Boolean(schema['x-ignore'])
-        },
-      }),
-    ],
+    reader: reader({ path: 'openapi/book-store.json' }),
+    generators: presets.server(),
     writer: writer({
       stringify: prettierStringify(prettierConfig),
     }),
