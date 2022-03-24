@@ -79,6 +79,7 @@
               "x-length": {
                 "style": "simple",
                 "description": "The number of records returned",
+                "required": true,
                 "schema": {
                   "type": "number"
                 }
